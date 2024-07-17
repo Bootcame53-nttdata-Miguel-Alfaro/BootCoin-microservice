@@ -1,0 +1,735 @@
+openapi: 3.0.0
+info:
+  title: Exchanges Microservice
+  description: Microservice for managing exchanges, providers, transactions, purchases, and wallets.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8086
+    description: Local server
+paths:
+  /exchanges/currencies:
+    post:
+      tags:
+        - currency
+      summary: Create a new currency
+      description: Add a new currency to the system
+      operationId: createCurrency
+      requestBody:
+        description: Create a new currency
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Currency'
+        required: true
+      responses:
+        "201":
+          description: Currency created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Currency'
+        "405":
+          description: Invalid input
+    get:
+      tags:
+        - currency
+      summary: Get all currencies
+      description: Retrieve a list of all currencies
+      operationId: getAllCurrencies
+      responses:
+        "200":
+          description: Currencies retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Currency'
+  /exchanges/currencies/{currencyId}:
+    get:
+      tags:
+        - currency
+      summary: Get currency by ID
+      description: Retrieve details of a currency by its ID
+      operationId: getCurrencyById
+      parameters:
+        - name: currencyId
+          in: path
+          description: ID of the currency to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Currency retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Currency'
+        "404":
+          description: Currency not found
+    put:
+      tags:
+        - currency
+      summary: Update currency
+      description: Update an existing currency
+      operationId: updateCurrency
+      parameters:
+        - name: currencyId
+          in: path
+          description: ID of the currency to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update currency details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Currency'
+        required: true
+      responses:
+        "200":
+          description: Currency updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Currency'
+        "404":
+          description: Currency not found
+    delete:
+      tags:
+        - currency
+      summary: Delete currency
+      description: Remove a currency from the system
+      operationId: deleteCurrency
+      parameters:
+        - name: currencyId
+          in: path
+          description: ID of the currency to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Currency deleted successfully
+        "404":
+          description: Currency not found
+
+  /exchanges/providers:
+    post:
+      tags:
+        - provider
+      summary: Create a new provider
+      description: Add a new provider to the system
+      operationId: createProvider
+      requestBody:
+        description: Create a new provider
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Provider'
+        required: true
+      responses:
+        "201":
+          description: Provider created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Provider'
+        "405":
+          description: Invalid input
+    get:
+      tags:
+        - provider
+      summary: Get all providers
+      description: Retrieve a list of all providers
+      operationId: getAllProviders
+      responses:
+        "200":
+          description: Providers retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Provider'
+  /exchanges/providers/{providerId}:
+    get:
+      tags:
+        - provider
+      summary: Get provider by ID
+      description: Retrieve details of a provider by its ID
+      operationId: getProviderById
+      parameters:
+        - name: providerId
+          in: path
+          description: ID of the provider to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Provider retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Provider'
+        "404":
+          description: Provider not found
+    delete:
+      tags:
+        - provider
+      summary: Delete provider
+      description: Remove a provider from the system
+      operationId: deleteProvider
+      parameters:
+        - name: providerId
+          in: path
+          description: ID of the provider to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Provider deleted successfully
+        "404":
+          description: Provider not found
+  /exchanges/providers/balance/{numberPhone}:
+    get:
+      tags:
+        - provider
+      summary: Get provider balance by phone number
+      description: Retrieve balance of a provider by phone number
+      operationId: getProviderBalance
+      parameters:
+        - name: numberPhone
+          in: path
+          description: Phone number of the provider to retrieve balance
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Provider balance retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Provider'
+        "404":
+          description: Provider not found
+
+  /exchanges/purchases:
+    post:
+      tags:
+        - purchase
+      summary: Create a new purchase
+      description: Add a new purchase to the system
+      operationId: createPurchase
+      requestBody:
+        description: Create a new purchase
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Purchase'
+        required: true
+      responses:
+        "201":
+          description: Purchase created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchase'
+        "405":
+          description: Invalid input
+  /exchanges/purchases/transaction/{transactionId}:
+    get:
+      tags:
+        - purchase
+      summary: Get purchase by transaction ID
+      description: Retrieve details of a purchase by transaction ID
+      operationId: getPurchaseByTransactionId
+      parameters:
+        - name: transactionId
+          in: path
+          description: Transaction ID of the purchase to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Purchase retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchase'
+        "404":
+          description: Purchase not found
+  /exchanges/purchases/document/{documentNumber}:
+    get:
+      tags:
+        - purchase
+      summary: Get purchases by document number
+      description: Retrieve purchases by document number
+      operationId: getPurchasesByDocumentNumber
+      parameters:
+        - name: documentNumber
+          in: path
+          description: Document number to retrieve purchases
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Purchases retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Purchase'
+        "404":
+          description: Purchases not found
+
+  /exchanges/transactions:
+    post:
+      tags:
+        - transaction
+      summary: Create a new transaction
+      description: Add a new transaction to the system
+      operationId: createTransaction
+      requestBody:
+        description: Create a new transaction
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperationResponse'
+        required: true
+      responses:
+        "201":
+          description: Transaction created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        "405":
+          description: Invalid input
+  /exchanges/transactions/{transactionId}:
+    get:
+      tags:
+        - transaction
+      summary: Get transaction by ID
+      description: Retrieve details of a transaction by its ID
+      operationId: getTransactionById
+      parameters:
+        - name: transactionId
+          in: path
+          description: ID of the transaction to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Transaction retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        "404":
+          description: Transaction not found
+  /exchanges/transactions/document/{documentNumber}:
+    get:
+      tags:
+        - transaction
+      summary: Get transactions by document number
+      description: Retrieve transactions by document number
+      operationId: getTransactionsByDocumentNumber
+      parameters:
+        - name: documentNumber
+          in: path
+          description: Document number to retrieve transactions
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Transactions retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        "404":
+          description: Transactions not found
+  /exchanges/transactions/provider/{providerId}:
+    get:
+      tags:
+        - transaction
+      summary: Get transactions by provider ID
+      description: Retrieve transactions by provider ID
+      operationId: getTransactionsByProviderId
+      parameters:
+        - name: providerId
+          in: path
+          description: Provider ID to retrieve transactions
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Transactions retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        "404":
+          description: Transactions not found
+  /exchanges/transactions/provider/{providerId}/accept/{transactionId}:
+    post:
+      tags:
+        - transaction
+      summary: Accept a transaction by provider
+      description: Accept a transaction by provider
+      operationId: acceptTransactionByProvider
+      parameters:
+        - name: providerId
+          in: path
+          description: Provider ID to accept transaction
+          required: true
+          schema:
+            type: string
+        - name: transactionId
+          in: path
+          description: Transaction ID to accept
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Transaction accepted successfully
+        "404":
+          description: Transaction not found
+  /exchanges/transactions/provider/{providerId}/reject/{transactionId}:
+    post:
+      tags:
+        - transaction
+      summary: Reject a transaction by provider
+      description: Reject a transaction by provider
+      operationId: rejectTransactionByProvider
+      parameters:
+        - name: providerId
+          in: path
+          description: Provider ID to reject transaction
+          required: true
+          schema:
+            type: string
+        - name: transactionId
+          in: path
+          description: Transaction ID to reject
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Transaction rejected successfully
+        "404":
+          description: Transaction not found
+
+  /exchanges/wallets:
+    post:
+      tags:
+        - wallet
+      summary: Create a new wallet
+      description: Add a new wallet to the system
+      operationId: createWallet
+      requestBody:
+        description: Create a new wallet
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Wallet'
+        required: true
+      responses:
+        "201":
+          description: Wallet created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        "405":
+          description: Invalid input
+  /exchanges/wallets/{phoneNumber}:
+    get:
+      tags:
+        - wallet
+      summary: Get wallet by phone number
+      description: Retrieve details of a wallet by phone number
+      operationId: getWalletByPhoneNumber
+      parameters:
+        - name: phoneNumber
+          in: path
+          description: Phone number of the wallet to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Wallet retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        "404":
+          description: Wallet not found
+  /exchanges/wallets/{walletId}:
+    put:
+      tags:
+        - wallet
+      summary: Update wallet
+      description: Update an existing wallet
+      operationId: updateWallet
+      parameters:
+        - name: walletId
+          in: path
+          description: ID of the wallet to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update wallet details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Wallet'
+        required: true
+      responses:
+        "200":
+          description: Wallet updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        "404":
+          description: Wallet not found
+    delete:
+      tags:
+        - wallet
+      summary: Delete wallet
+      description: Remove a wallet from the system
+      operationId: deleteWallet
+      parameters:
+        - name: walletId
+          in: path
+          description: ID of the wallet to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Wallet deleted successfully
+        "404":
+          description: Wallet not found
+
+components:
+  schemas:
+    Currency:
+      required:
+        - name
+        - exchangeRate
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          description: Name of the currency
+        exchangeRate:
+          type: number
+          format: double
+          description: Exchange rate of the currency
+      xml:
+        name: currency
+    OperationResponse:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+          description: Amount of the operation
+        payMethodCode:
+          type: string
+          description: Payment method code
+        documentNumber:
+          type: string
+          description: Document number associated with the operation
+        providerId:
+          type: string
+          description: Provider ID associated with the operation
+      xml:
+        name: operationResponse
+    Provider:
+      required:
+        - name
+        - lastname
+        - email
+        - phone
+        - bankAccountNumber
+        - balance
+        - createdAt
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          description: Name of the provider
+        lastname:
+          type: string
+          description: Last name of the provider
+        email:
+          type: string
+          description: Email of the provider
+        phone:
+          type: string
+          description: Phone number of the provider
+        bankAccountNumber:
+          type: string
+          description: Bank account number of the provider
+        balance:
+          type: number
+          format: double
+          description: Balance of the provider
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation date
+          readOnly: true
+      xml:
+        name: provider
+    Purchase:
+      required:
+        - transactionId
+        - providerId
+        - documentNumber
+        - amount
+        - exchangeRate
+        - payMethodCode
+        - createdAt
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        transactionId:
+          type: string
+          description: Transaction ID associated with the purchase
+        providerId:
+          type: string
+          description: Provider ID associated with the purchase
+        documentNumber:
+          type: string
+          description: Document number associated with the purchase
+        amount:
+          type: number
+          format: double
+          description: Amount of the purchase
+        exchangeRate:
+          type: number
+          format: double
+          description: Exchange rate of the purchase
+        payMethodCode:
+          type: string
+          description: Payment method code
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation date
+          readOnly: true
+      xml:
+        name: purchase
+    Transaction:
+      required:
+        - amount
+        - payMethodCode
+        - payMethod
+        - documentNumber
+        - providerId
+        - status
+        - exchangeRate
+        - createdAt
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        amount:
+          type: number
+          format: double
+          description: Amount of the transaction
+        payMethodCode:
+          type: string
+          description: Payment method code
+        payMethod:
+          type: string
+          description: Payment method
+        documentNumber:
+          type: string
+          description: Document number associated with the transaction
+        providerId:
+          type: string
+          description: Provider ID associated with the transaction
+        status:
+          type: string
+          description: Status of the transaction
+        exchangeRate:
+          type: number
+          format: double
+          description: Exchange rate of the transaction
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation date
+          readOnly: true
+      xml:
+        name: transaction
+    Wallet:
+      required:
+        - documentTypeCode
+        - dni
+        - phoneNumber
+        - balance
+        - email
+        - createdAt
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        documentTypeCode:
+          type: string
+          description: Document type code
+        dni:
+          type: string
+          description: DNI of the wallet owner
+        phoneNumber:
+          type: string
+          description: Phone number associated with the wallet
+        balance:
+          type: number
+          format: double
+          description: Wallet balance
+        email:
+          type: string
+          description: Email of the wallet owner
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation date
+          readOnly: true
+      xml:
+        name: wallet
